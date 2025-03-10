@@ -1,0 +1,75 @@
+import { FullAbility, PokemonInfo, PokemonSpecies } from "@/_types/pokemon";
+import { CapitalizeFirst } from "@/_utils/stringFuncs";
+import { EvolutionChart, FallbackEvolutionChart } from "@/comps/evolutionChart";
+import { ImageWithFallback } from "@/comps/imageWithFallback";
+import { TypeDisplay } from "@/comps/typeDisplay";
+import Link from "next/link";
+import { Suspense } from "react";
+import { unstable_ViewTransition as ViewTransition } from 'react'
+
+const POKEMON_INFO_URL = "https://pokeapi.co/api/v2/pokemon/"
+
+export default async function Test2({ params, searchParams }: {
+    params: Promise<{ pokemonName: string }>,
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const { pokemonName } = await params;
+    const searchParameters = await searchParams;
+    const queryString = Object.entries(searchParameters).map(s => `${s[0]}=${s[1]}`).join("&");
+    console.log(queryString);
+
+    const pokemonInfoResponse = await fetch(POKEMON_INFO_URL + pokemonName, { cache: "force-cache" })
+    const pokemonInfo: PokemonInfo = await pokemonInfoResponse.json()
+
+    const pokemonSpeciesResponse = await fetch(pokemonInfo.species.url, { cache: 'force-cache' });
+    const pokemonSpecies: PokemonSpecies = await pokemonSpeciesResponse.json();
+
+    const abilities = await Promise.all(pokemonInfo.abilities.map(async m => {
+        const abilityResponse = await fetch(m.ability.url, { cache: 'force-cache' });
+        const ability: FullAbility = await abilityResponse.json();
+        return ability
+    }));
+
+    return <div className="flex flex-col pt-2 px-4 gap-2 max-w-[960px] w-[95%]">
+        <Link href={"../?" + queryString} className="self-start rounded bg-red-900 px-4 py-2">Back</Link>
+        <header className="flex flex-row items-end p-2 bg-linear-to-t from-red-900 to-red-950/70 rounded-t-lg">
+            <div className="rounded-full from-zinc-700 to-slate-900 bg-radial border-4 border-slate-100 h-[150px] w-[150px]">
+                <ViewTransition name={`icon-${pokemonInfo.name}`}>
+                    <ImageWithFallback fallback="" alt={pokemonInfo.name} src={pokemonInfo?.sprites.front_default} width={250} height={250}
+                        className="rounded-sm h-[150px] w-[150px]" />
+                </ViewTransition>
+            </div>
+
+            <div className="flex flex-col px-2">
+                <div className="flex flex-row gap-3">
+                    {pokemonInfo.types.map(m => <Link key={m.type.name} href={`/type/${m.type.name}`}><TypeDisplay type={m.type.name} /></Link>)}
+                </div>
+                <h1 className="text-5xl underline underline-offset-8 py-2">{<ViewTransition name={`name-${pokemonInfo.name}`}><span>{CapitalizeFirst(pokemonInfo.name)}</span></ViewTransition>} #{pokemonSpecies?.id ?? pokemonInfo.id}</h1>
+            </div>
+        </header>
+        <main className="grid grid-cols-[165px_1fr] gap-2">
+            <aside className="bg-red-900 rounded-r-sm p-2">
+                <h2 className="pb-2 text-lg">Base Stats</h2>
+                {pokemonInfo.stats.map(s => <p key={s.stat.name}><span className="underline">{s.stat.name}:</span> {' ' + s.base_stat}</p>)}
+            </aside>
+            <article className="bg-red-900 rounded-l-sm p-2">
+                <h2 className="pb-2 text-lg">Description</h2>
+                {pokemonSpecies?.flavor_text_entries.filter(s => s.language.name == "en")[0].flavor_text}
+                <div className="border-b border-white/20 py-4"></div>
+
+                <h2 className="pb-2 text-lg">Abilities</h2>
+                {abilities.map(a =>
+                    <p key={a.name}>
+                        <span className="underline underline-offset-2">{CapitalizeFirst(a.name)}:</span>
+                        {' ' + a.flavor_text_entries.filter(ee => ee.language.name == "en")[0].flavor_text}
+                    </p>)
+                }
+                <div className="border-b border-white/20 py-4"></div>
+                <h2 className="pb-2 text-lg">Evolution Chart</h2>
+                <Suspense fallback={<FallbackEvolutionChart />}>
+                    <EvolutionChart pokemonSpecies={pokemonSpecies} queryParams={queryString ?? ""} />
+                </Suspense>
+            </article>
+        </main>
+    </div>
+}
