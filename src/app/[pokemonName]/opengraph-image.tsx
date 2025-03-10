@@ -33,6 +33,7 @@ export default async function Image({ params }: { params: { pokemonName: string 
                 }}
             >
                 <img src={pokemonInfo.sprites.front_default}
+                    alt="pokemon sprite"
                     style={{
                         width: '500px'
                     }} />

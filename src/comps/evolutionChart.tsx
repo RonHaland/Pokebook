@@ -13,8 +13,8 @@ export async function EvolutionChart({ pokemonSpecies, queryParams }: Props) {
     const pokemonEvolutionResponse = await fetch(pokemonSpecies.evolution_chain.url, { cache: 'force-cache' });
     const pokemonEvolution: PokemonEvolutionChain = await pokemonEvolutionResponse.json();
 
-    let chainLink = pokemonEvolution.chain;
-    let evolutionDataPromises = getChildLinkPromises(chainLink);
+    const chainLink = pokemonEvolution.chain;
+    const evolutionDataPromises = getChildLinkPromises(chainLink);
 
     function getChildLinkPromises(link: EvolutionLink): Promise<Response>[] {
         let result: Promise<Response>[] = [fetch(link.species.url, { cache: "force-cache" })]

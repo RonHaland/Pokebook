@@ -3,7 +3,7 @@ type Props = {
 }
 
 export function TypeDisplay({ type }: Props) {
-    var className =
+    const className =
         type === "grass" ? "bg-lime-800" :
             type === "bug" ? "bg-lime-500 text-black" :
                 type === "ghost" ? "bg-purple-500" :

@@ -63,7 +63,7 @@ export function SearchablePokemonList({ pokemonList }: Props) {
         <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
             <div className="">
                 <ul className=" grid grid-cols-6 gap-2">
-                    {relevantPokemon?.map(p => <li key={p.name}><PokeCard id={p.id} name={p.name} url={p.name} /></li>)}
+                    {relevantPokemon?.map(p => <li key={p.name}><PokeCard id={p.id} name={p.name} /></li>)}
                 </ul>
             </div>
         </main>

@@ -9,17 +9,11 @@ import { useSearchParams } from "next/navigation";
 type Props = {
     name: string;
     id: number;
-    url: string;
 }
 
-export function PokeCard({ name = "", id = -1, url = "" }: Props) {
+export function PokeCard({ name = "", id = -1 }: Props) {
 
     const queryParams = useSearchParams();
-
-    const setBackupImage = (e: any) => {
-        e.target.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png";
-        e.target.srcset = null;
-    }
 
     return <Link href={`/${name}?${queryParams}`}>
         <article className="p-2 bg-linear-to-b from-red-600 to-red-800 rounded-lg grid grid-cols-[1fr_50px] w-52 shadow-lg outline-white shadow-black hover:scale-110 hover:outline-2 transition-all duration-200">

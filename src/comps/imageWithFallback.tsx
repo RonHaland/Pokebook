@@ -7,5 +7,5 @@ export function ImageWithFallback(props: ImageProps & { fallback: string }) {
     const [src, setSrc] = useState(props.src)
     const { fallback, ...rest } = props;
 
-    return <Image {...rest} src={src} onError={() => setSrc(fallback)} />
+    return <Image {...rest} src={src} onError={() => setSrc(fallback)} alt="" />
 }

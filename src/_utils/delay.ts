@@ -1,8 +1,6 @@
 export async function delay(ms: number) {
-    await new Promise<void>((res, rej) => {
-        let ready = false;
+    await new Promise<void>((res) => {
         setTimeout(() => {
-            ready = true;
             res();
         }, ms);
     });

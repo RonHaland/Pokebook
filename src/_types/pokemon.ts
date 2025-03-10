@@ -45,7 +45,6 @@ export type PokemonEvolutionChain = {
 export type EvolutionLink = {
     is_baby: boolean,
     species: { name: string, url: string },
-    evolution_details: {}
     evolves_to: EvolutionLink[],
 }
 
