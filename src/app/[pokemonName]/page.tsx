@@ -19,16 +19,18 @@ export default async function Test2({ params, searchParams }: {
     console.log(queryString);
 
     const pokemonInfoResponse = await fetch(POKEMON_INFO_URL + pokemonName, { cache: "force-cache" })
-    const pokemonInfo: PokemonInfo = await pokemonInfoResponse.json()
 
-    const pokemonSpeciesResponse = await fetch(pokemonInfo.species.url, { cache: 'force-cache' });
-    const pokemonSpecies: PokemonSpecies = await pokemonSpeciesResponse.json();
+    const pokemonInfo: PokemonInfo | null = pokemonInfoResponse.ok ? await pokemonInfoResponse.json() : null;
 
-    const abilities = await Promise.all(pokemonInfo.abilities.map(async m => {
+    const pokemonSpeciesResponse = pokemonInfoResponse.ok ? await fetch(pokemonInfo!.species.url, { cache: 'force-cache' }) : null;
+    const pokemonSpecies: PokemonSpecies = pokemonSpeciesResponse?.ok ? await pokemonSpeciesResponse.json() : null;
+
+    const abilities = await Promise.all(pokemonInfo?.abilities.map(async m => {
         const abilityResponse = await fetch(m.ability.url, { cache: 'force-cache' });
         const ability: FullAbility = await abilityResponse.json();
         return ability
-    }));
+    }) ?? []);
+    if (!pokemonInfo) return <div className="flex flex-col mt-4 gap-8"><Link href={"../?" + queryString} className="self-start rounded bg-red-900 px-4 py-2">Back</Link><h1 className="text-4xl">{pokemonName.toLocaleUpperCase()} NOT FOUND</h1></div>
 
     return <div className="flex flex-col pt-2 sm:px-4 gap-1 sm:gap-2 max-w-[960px] w-full sm:w-[95%] p-1">
         <Link href={"../?" + queryString} className="self-start rounded bg-red-900 px-4 py-2">Back</Link>

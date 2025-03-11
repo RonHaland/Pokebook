@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from "react"
 import { PokeCard } from "./pokeCard";
-import { useDebouncedState } from "@/_utils/useDebounce";
+import { useDebouncedState } from "@/_utils/useDebouncedState";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
