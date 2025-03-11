@@ -6,7 +6,7 @@ export type PokemonList = {
 }
 
 export type PokemonInfo = {
-    sprites: { front_default: string },
+    sprites: { front_default: string, back_default: string },
     name: string,
     id: number,
     species: { name: string, url: string },

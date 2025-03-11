@@ -25,28 +25,40 @@ export default async function Image({ params }: { params: { pokemonName: string 
             <div
                 style={{
                     fontSize: 36,
-                    background: '#888',
+                    background: 'linear-gradient(to bottom left, #66f, #0aa)',
                     width: '100%',
                     height: '100%',
                     display: 'flex',
                     position: 'relative'
                 }}
             >
+                <img src={pokemonInfo.sprites.back_default}
+                alt="pokemon sprite"
+                style={{
+                    width: '500px',
+                    position: 'absolute',
+                    bottom: '0'
+                }} />
                 <img src={pokemonInfo.sprites.front_default}
                     alt="pokemon sprite"
                     style={{
-                        width: '500px'
+                        width: '500px',
+                        position: 'absolute',
+                        top: '0',
+                        right: '0'
                     }} />
                 <span style={{
                     position: 'absolute',
                     padding: '1rem',
                     background: '#FFFA',
                     display: 'block',
-                    left: '200px',
-                    top: '350px',
-                    borderRadius: '20px'
+                    left: '50%',
+                    bottom: '50px',
+                    borderRadius: '20px',
+                    fontSize: '72px',
+                    transform: 'translateX(-50%)'
                 }}>
-                    {pokemonInfo.name}
+                    {pokemonInfo.name.toLocaleUpperCase()}
                 </span>
             </div>
         ),
