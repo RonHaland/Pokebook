@@ -72,8 +72,8 @@ function ChartNode({ node, currentPokemon = "", isRoot = false, className = "", 
         return <ChartNode key={c.species.name} node={c} currentPokemon={currentPokemon} className={`${!isLast && 'border-b-2 border-white/20'}`} queryParams={queryParams} />
     })
 
-    return <div className={`${className} flex flex-row items-center mx-2 `}>
-        {!isRoot && <span className="m-4">{"-->"}</span>}
+    return <div className={`${className} flex flex-row items-center sm:mx-2 `}>
+        {!isRoot && <><span className="m-4 block whitespace-nowrap">{"-->"}</span></>}
         <Link href={`./${node?.species.name}?${queryParams}`}>
             <div className={`py-1 px-2 rounded-2xl bg-black/30 w-24 h-24 flex flex-col items-center ${node?.species.name === currentPokemon && "border-2 border-white"}`}>
 
