@@ -1,5 +1,5 @@
 import { FullAbility, PokemonInfo, PokemonSpecies } from "@/_types/pokemon";
-import { CapitalizeFirst } from "@/_utils/stringFuncs";
+import { CapitalizeFirst, ShortenStatName } from "@/_utils/stringFuncs";
 import { EvolutionChart, FallbackEvolutionChart } from "@/comps/evolutionChart";
 import { ImageWithFallback } from "@/comps/imageWithFallback";
 import { TypeDisplay } from "@/comps/typeDisplay";
@@ -30,13 +30,13 @@ export default async function Test2({ params, searchParams }: {
         return ability
     }));
 
-    return <div className="flex flex-col pt-2 px-4 gap-2 max-w-[960px] w-[95%]">
+    return <div className="flex flex-col pt-2 sm:px-4 gap-1 sm:gap-2 max-w-[960px] w-full sm:w-[95%]">
         <Link href={"../?" + queryString} className="self-start rounded bg-red-900 px-4 py-2">Back</Link>
         <header className="flex flex-row items-end p-2 bg-linear-to-t from-red-900 to-red-950/70 rounded-t-lg">
-            <div className="rounded-full from-zinc-700 to-slate-900 bg-radial border-4 border-slate-100 h-[150px] w-[150px]">
+            <div className="rounded-full from-zinc-700 to-slate-900 bg-radial border-4 border-slate-100 md:h-[150px] md:w-[150px] w-[100px] h-[100px]">
                 <ViewTransition name={`icon-${pokemonInfo.name}`}>
                     <ImageWithFallback fallback="" alt={pokemonInfo.name} src={pokemonInfo?.sprites.front_default} width={250} height={250}
-                        className="rounded-sm h-[150px] w-[150px]" />
+                        className="rounded-sm md:h-[150px] md:w-[150px] w-[100px] h-[100px]" />
                 </ViewTransition>
             </div>
 
@@ -44,15 +44,17 @@ export default async function Test2({ params, searchParams }: {
                 <div className="flex flex-row gap-3">
                     {pokemonInfo.types.map(m => <Link key={m.type.name} href={`/type/${m.type.name}`}><TypeDisplay type={m.type.name} /></Link>)}
                 </div>
-                <h1 className="text-5xl underline underline-offset-8 py-2">{<ViewTransition name={`name-${pokemonInfo.name}`}><span>{CapitalizeFirst(pokemonInfo.name)}</span></ViewTransition>} #{pokemonSpecies?.id ?? pokemonInfo.id}</h1>
+                <h1 className="text-2xl md:text-5xl underline underline-offset-8 py-2">{<ViewTransition name={`name-${pokemonInfo.name}`}><span>{CapitalizeFirst(pokemonInfo.name)}</span></ViewTransition>} #{pokemonSpecies?.id ?? pokemonInfo.id}</h1>
             </div>
         </header>
-        <main className="grid grid-cols-[165px_1fr] gap-2">
-            <aside className="bg-red-900 rounded-r-sm p-2">
+        <main className="grid sm:grid-cols-[165px_1fr] sm:gap-2 gap-1 overflow-hidden">
+            <aside className="bg-red-900 sm:rounded-r-sm p-2">
                 <h2 className="pb-2 text-lg">Base Stats</h2>
-                {pokemonInfo.stats.map(s => <p key={s.stat.name}><span className="underline">{s.stat.name}:</span> {' ' + s.base_stat}</p>)}
+                <div className="grid grid-cols-3 sm:block gap-1">
+                    {pokemonInfo.stats.map(s => <p key={s.stat.name}><span className="underline">{ShortenStatName(s.stat.name)}:</span> {' ' + s.base_stat}</p>)}
+                </div>
             </aside>
-            <article className="bg-red-900 rounded-l-sm p-2">
+            <article className="bg-red-900 sm:rounded-l-sm p-2 max-w-[100vw]">
                 <h2 className="pb-2 text-lg">Description</h2>
                 {pokemonSpecies?.flavor_text_entries.filter(s => s.language.name == "en")[0].flavor_text}
                 <div className="border-b border-white/20 py-4"></div>
@@ -66,9 +68,11 @@ export default async function Test2({ params, searchParams }: {
                 }
                 <div className="border-b border-white/20 py-4"></div>
                 <h2 className="pb-2 text-lg">Evolution Chart</h2>
-                <Suspense fallback={<FallbackEvolutionChart />}>
-                    <EvolutionChart pokemonSpecies={pokemonSpecies} queryParams={queryString ?? ""} />
-                </Suspense>
+                <div className="overflow-x-auto">
+                    <Suspense fallback={<FallbackEvolutionChart />}>
+                        <EvolutionChart pokemonSpecies={pokemonSpecies} queryParams={queryString ?? ""} />
+                    </Suspense>
+                </div>
             </article>
         </main>
     </div>

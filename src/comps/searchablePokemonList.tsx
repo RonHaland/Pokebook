@@ -25,6 +25,7 @@ export function SearchablePokemonList({ pokemonList }: Props) {
     useEffect(() => {
         setInputValue(searchParams.get(SEARCH_PARAM_NAME) ?? "")
         filterPokemon(searchParams.get(SEARCH_PARAM_NAME) ?? "")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     function onChange(e: ChangeEvent<HTMLInputElement>) {
@@ -46,6 +47,7 @@ export function SearchablePokemonList({ pokemonList }: Props) {
         params.set(SEARCH_PARAM_NAME, inputValue);
 
         router.replace(`${pathName}?${params.toString()}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputValue])
 
     function filterPokemon(value: string) {
@@ -62,7 +64,7 @@ export function SearchablePokemonList({ pokemonList }: Props) {
         </div>
         <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
             <div className="">
-                <ul className=" grid grid-cols-6 gap-2">
+                <ul className=" grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6">
                     {relevantPokemon?.map(p => <li key={p.name}><PokeCard id={p.id} name={p.name} /></li>)}
                 </ul>
             </div>
