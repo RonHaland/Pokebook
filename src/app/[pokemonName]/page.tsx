@@ -6,6 +6,7 @@ import { TypeDisplay } from "@/comps/typeDisplay";
 import Link from "next/link";
 import { Suspense } from "react";
 import { unstable_ViewTransition as ViewTransition } from 'react'
+import * as motion from "motion/react-client"
 
 const POKEMON_INFO_URL = "https://pokeapi.co/api/v2/pokemon/"
 
@@ -34,7 +35,7 @@ export default async function Test2({ params, searchParams }: {
 
     return <div className="flex flex-col pt-2 sm:px-4 gap-1 sm:gap-2 max-w-[960px] w-full sm:w-[95%] p-1">
         <Link href={"../?" + queryString} className="self-start rounded bg-red-900 px-4 py-2">Back</Link>
-        <header className="flex flex-row items-end p-2 bg-linear-to-t from-red-900 to-red-950/70 rounded-t-lg">
+        <motion.header className="flex flex-row items-end p-2 bg-linear-to-t from-red-900 to-red-950/70 rounded-t-lg" initial={{scale: 0.8, opacity: 0}} animate={{scale: 1, opacity: 1}}>
             <div className="rounded-full from-zinc-700 to-slate-900 bg-radial border-4 border-slate-100 md:h-[150px] md:w-[150px] w-[100px] h-[100px]">
                 <ViewTransition name={`icon-${pokemonInfo.name}`}>
                     <ImageWithFallback fallback="" alt={pokemonInfo.name} src={pokemonInfo?.sprites.front_default} width={250} height={250}
@@ -48,15 +49,15 @@ export default async function Test2({ params, searchParams }: {
                 </div>
                 <h1 className="text-2xl md:text-5xl underline underline-offset-8 py-2">{<ViewTransition name={`name-${pokemonInfo.name}`}><span>{CapitalizeFirst(pokemonInfo.name)}</span></ViewTransition>} #{pokemonSpecies?.id ?? pokemonInfo.id}</h1>
             </div>
-        </header>
+        </motion.header>
         <main className="grid grid-cols-1 sm:grid-cols-[165px_1fr] sm:gap-2 gap-1 overflow-hidden max-w-[100vw]">
-            <aside className="bg-red-900 sm:rounded-r-sm p-2">
+            <motion.aside className="bg-red-900 sm:rounded-r-sm p-2" initial={{scale: 0.8, opacity: 0}} animate={{scale: 1, opacity: 1}}>
                 <h2 className="pb-2 text-lg">Base Stats</h2>
                 <div className="grid grid-cols-3 sm:block gap-1">
                     {pokemonInfo.stats.map(s => <p key={s.stat.name}><span className="underline">{ShortenStatName(s.stat.name)}:</span> {' ' + s.base_stat}</p>)}
                 </div>
-            </aside>
-            <article className="bg-red-900 sm:rounded-l-sm p-2">
+            </motion.aside>
+            <motion.article className="bg-red-900 sm:rounded-l-sm p-2" initial={{scale: 0.8, opacity: 0}} animate={{scale: 1, opacity: 1}}>
                 <h2 className="pb-2 text-lg">Description</h2>
                 {pokemonSpecies?.flavor_text_entries.filter(s => s.language.name == "en")[0].flavor_text}
                 <div className="border-b border-white/20 py-4"></div>
@@ -75,7 +76,7 @@ export default async function Test2({ params, searchParams }: {
                         <EvolutionChart pokemonSpecies={pokemonSpecies} queryParams={queryString ?? ""} />
                     </Suspense>
                 </div>
-            </article>
+            </motion.article>
         </main>
     </div>
 }

@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { PokeCard } from "./pokeCard";
 import { useDebouncedState } from "@/_utils/useDebouncedState";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as motion from 'motion/react-client'
 
 type Props = {
     pokemonList: { name: string, url: string, id: number }[]
@@ -63,11 +64,12 @@ export function SearchablePokemonList({ pokemonList }: Props) {
                 className="absolute right-2 rounded-full border border-white w-5 h-5 top-2 flex justify-center items-center">x</button>
         </div>
         <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-            <div className="">
+            <motion.div initial={{translateX:-20, opacity:0.8}}
+            animate={{translateX:0, opacity:1}}>
                 <ul className=" grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6">
                     {relevantPokemon?.map(p => <li key={p.name}><PokeCard id={p.id} name={p.name} /></li>)}
                 </ul>
-            </div>
+            </motion.div>
         </main>
     </div>
 }
