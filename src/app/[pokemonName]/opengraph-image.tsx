@@ -2,7 +2,7 @@ import { PokemonInfo } from '@/_types/pokemon';
 import { ImageResponse } from 'next/og'
 
 // Image metadata
-export const alt = 'About Acme'
+export const alt = 'About the pokemon'
 export const size = {
     width: 1200,
     height: 630,
@@ -32,19 +32,20 @@ export default async function Image({ params }: { params: { pokemonName: string 
                     position: 'relative'
                 }}
             >
-                <img src={pokemonInfo.sprites.back_default}
+                <img src={pokemonInfo.sprites.back_default ?? pokemonInfo.sprites.front_default}
                 alt="pokemon sprite"
                 style={{
-                    width: '500px',
+                    width: '800px',
                     position: 'absolute',
-                    bottom: '0'
+                    bottom: '-150px',
+                    left: '-150px'
                 }} />
                 <img src={pokemonInfo.sprites.front_default}
                     alt="pokemon sprite"
                     style={{
                         width: '500px',
                         position: 'absolute',
-                        top: '0',
+                        top: '-40px',
                         right: '0'
                     }} />
                 <span style={{
@@ -52,11 +53,10 @@ export default async function Image({ params }: { params: { pokemonName: string 
                     padding: '1rem',
                     background: '#FFFA',
                     display: 'block',
-                    left: '50%',
+                    right: '100px',
                     bottom: '50px',
                     borderRadius: '20px',
                     fontSize: '72px',
-                    transform: 'translateX(-50%)'
                 }}>
                     {pokemonInfo.name.toLocaleUpperCase()}
                 </span>

@@ -17,7 +17,6 @@ export default async function Test2({ params, searchParams }: {
     const { pokemonName } = await params;
     const searchParameters = await searchParams;
     const queryString = Object.entries(searchParameters).map(s => `${s[0]}=${s[1]}`).join("&");
-    console.log(queryString);
 
     const pokemonInfoResponse = await fetch(POKEMON_INFO_URL + pokemonName, { cache: "force-cache" })
 
