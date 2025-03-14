@@ -10,10 +10,10 @@ export type PokemonInfo = {
     name: string,
     id: number,
     species: { name: string, url: string },
-    abilities: { slot: number, hidden: boolean, ability: PokemonAbility }[],
-    moves: { move: PokemonMove }[],
-    stats: { base_stat: number, effort: number, stat: PokemonStat }[],
-    types: { slot: number, type: PokemonType }[],
+    abilities: { slot: number, hidden: boolean, ability: Basic }[],
+    moves: { move: Basic }[],
+    stats: { base_stat: number, effort: number, stat: Basic }[],
+    types: { slot: number, type: Basic }[],
 }
 
 export type FullAbility = {
@@ -56,31 +56,28 @@ export type EvolutionMap = {
 export type PokemonTypeData = {
     id: number,
     name: string,
-    moves: PokemonMove[],
+    moves: Basic[],
     pokemon: PokemonTypePokemon[],
 }
 
+export type PokemonMoveData = {
+    id: number
+    name: string
+    url: string
+    accuracy: number
+    pp: number
+    priority: number
+    power: number
+    damage_class: Basic
+    flavor_text_entries: {flavor_text: string, language: Basic}
+}
+
 type PokemonTypePokemon = {
-    pokemon: { name: string, url: string },
+    pokemon: Basic,
     slot: number;
 }
 
-type PokemonAbility = {
-    name: string,
-    url: string,
-}
-
-type PokemonMove = {
-    name: string,
-    url: string,
-}
-
-type PokemonStat = {
-    name: string,
-    url: string,
-}
-
-type PokemonType = {
+type Basic = {
     name: string,
     url: string,
 }

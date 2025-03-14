@@ -12,7 +12,7 @@ export default function DevPage(){
 
     return <main>
         <div className="text-white w-80">
-        <AnimatedCloseIcon />
+            <AnimatedCloseIcon />
         </div>
     </main>
 }

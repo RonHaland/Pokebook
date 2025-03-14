@@ -1,7 +1,7 @@
 import { TypeDisplay } from "@/comps/typeDisplay";
 import Link from "next/link";
 
-const TYPES_URL = "https://pokeapi.co/api/v2/type"
+const TYPES_URL = (process.env.API_URL ?? "https://pokeapi.co/api/v2")+"/type"
 export default async function Types() {
 
     const typesResponse = await fetch(TYPES_URL, { cache: 'force-cache' });

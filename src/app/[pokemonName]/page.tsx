@@ -7,8 +7,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { unstable_ViewTransition as ViewTransition } from 'react'
 import * as motion from "motion/react-client"
+import { MovesGrid } from "@/comps/movesGrid";
 
-const POKEMON_INFO_URL = "https://pokeapi.co/api/v2/pokemon/"
+const POKEMON_INFO_URL = (process.env.API_URL ?? "https://pokeapi.co/api/v2") + "/pokemon/"
 
 export default async function Test2({ params, searchParams }: {
     params: Promise<{ pokemonName: string }>,
@@ -75,6 +76,9 @@ export default async function Test2({ params, searchParams }: {
                         <EvolutionChart pokemonSpecies={pokemonSpecies} queryParams={queryString ?? ""} />
                     </Suspense>
                 </div>
+            </motion.article>
+            <motion.article className="h-80 col-span-2">
+                <MovesGrid moves={pokemonInfo.moves.map(m => ({...m.move}))} />
             </motion.article>
         </main>
     </div>

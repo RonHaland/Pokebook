@@ -3,7 +3,7 @@ import { SearchablePokemonList } from "@/comps/searchablePokemonList";
 import { TypeDisplay } from "@/comps/typeDisplay";
 import { Suspense } from "react";
 
-const TYPE_URL = "https://pokeapi.co/api/v2/type/"
+const TYPE_URL = (process.env.API_URL ?? "https://pokeapi.co/api/v2") + "/type/"
 export default async function TypePage({ params }: { params: Promise<{ typeName: string }> }) {
     const typeName = (await params).typeName;
 

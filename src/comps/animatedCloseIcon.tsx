@@ -36,7 +36,7 @@ import * as motion from 'motion/react-client';
 
 export function AnimatedCloseIcon(){
     
-    return <motion.svg viewBox={"0 0 600 600"} initial="hidden" animate="visible" whileHover="hover" className={'overflow-visible'} whileTap="click">
+    return <motion.svg viewBox={"0 0 600 600"} initial="hidden" animate="visible" whileHover="hover" className={'overflow-visible'} whileTap="click" width="100%" height="100%">
         <motion.line x1={180} x2={420} y1={180} y2={420} stroke="currentColor" strokeWidth={50} style={{strokeLinecap: 'round'}} variants={draw} custom={{delay: 0.0, duration:0.4, scale: 0.8}}/>
         <motion.line x1={180} x2={420} y1={420} y2={180} stroke="currentColor" strokeWidth={50} style={{strokeLinecap: 'round'}} variants={draw} custom={{delay: 0.2, duration:0.4, scale: 0.8}}/>
         <motion.rect width={520} height={520} x={40} y={40} variants={draw} custom={{delay: 0.5, duration:0.8, direction:'left', scale:0.8}} fill="transparent" stroke="currentColor" strokeWidth={60} style={{strokeLinecap: 'round'}} rx={100}/>
