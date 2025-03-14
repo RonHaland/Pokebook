@@ -17,7 +17,7 @@ type Move = {name: string, url: string} | PokemonMoveData;
 
 export function MovesGrid({moves}: Props){
     const [fetchNext, setFetchNext] = useState(0); 
-    const [rowData, setRowData] = useState<Move[]>(moves.map(m => ({...m, loadMove: {name: m.name, url: m.url}})));
+    const [rowData, setRowData] = useState<Move[]>(moves.map(m => ({...m})));
     const [columns] = useState<ColDef[]>([
         {field: "name", },
         {field: "accuracy"},
@@ -73,7 +73,7 @@ export function MovesGrid({moves}: Props){
 
       setTimeout(() => {
         setFetchNext(n => n+batchsize);
-      }, 200);
+      }, 250);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchNext]);
@@ -84,5 +84,5 @@ export function MovesGrid({moves}: Props){
         borderRadius: '1px',
     })
 
-    return <AgGridReact rowData={rowData} columnDefs={columns} theme={theme} autoSizeStrategy={autoSizeStrategy}/>
+    return fetchNext < rowData.length +0 ? <div className="self-stretch h-full bg-red-950 text-white rounded-xl flex justify-center items-center border-[1px] border-white/5">LOADING...</div> : <AgGridReact rowData={rowData} columnDefs={columns} theme={theme} autoSizeStrategy={autoSizeStrategy}/>
 }
