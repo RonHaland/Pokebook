@@ -69,6 +69,7 @@ export type PokemonMoveData = {
     priority: number
     power: number
     damage_class: Basic
+    type: Basic
     flavor_text_entries: {flavor_text: string, language: Basic}
 }
 

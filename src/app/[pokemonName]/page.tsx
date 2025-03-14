@@ -77,8 +77,12 @@ export default async function Test2({ params, searchParams }: {
                     </Suspense>
                 </div>
             </motion.article>
-            <motion.article className="h-80 sm:col-span-2">
-                <MovesGrid moves={pokemonInfo.moves.map(m => ({...m.move}))} />
+            <motion.article className="h-[500px] sm:col-span-2 p-1 bg-red-900 rounded-b-lg grid grid-rows-[auto_1fr]" initial={{scale: 0.8, opacity: 0}} animate={{scale: 1, opacity: 1}}>
+                <h2 className="pb-2 text-lg m-2">Moves</h2>
+                <div className="">
+                    <MovesGrid moves={pokemonInfo.moves.map(m => ({...m.move}))} />
+
+                </div>
             </motion.article>
         </main>
     </div>

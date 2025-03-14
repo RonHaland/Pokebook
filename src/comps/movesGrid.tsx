@@ -1,9 +1,10 @@
 'use client'
 
 import { AgGridReact } from "ag-grid-react"
-import { useMemo, useState } from "react"
-import { AllCommunityModule, ColDef, ICellRendererParams, ModuleRegistry, SizeColumnsToContentStrategy, SizeColumnsToFitGridStrategy, SizeColumnsToFitProvidedWidthStrategy, themeQuartz } from 'ag-grid-community';
+import { useEffect, useMemo, useState } from "react"
+import { AllCommunityModule, ColDef, colorSchemeDarkWarm, ICellRendererParams, ModuleRegistry, SizeColumnsToContentStrategy, SizeColumnsToFitGridStrategy, SizeColumnsToFitProvidedWidthStrategy, themeQuartz } from 'ag-grid-community';
 import { PokemonMoveData } from "@/_types/pokemon";
+import { TypeDisplay } from "./typeDisplay";
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -15,39 +16,32 @@ type Props = {
 type Move = {name: string, url: string} | PokemonMoveData;
 
 export function MovesGrid({moves}: Props){
+    const [fetchNext, setFetchNext] = useState(0); 
     const [rowData, setRowData] = useState<Move[]>(moves.map(m => ({...m, loadMove: {name: m.name, url: m.url}})));
     const [columns] = useState<ColDef[]>([
         {field: "name", },
-        {field: "loadMove", cellRenderer: (c: ICellRendererParams) => <>{c.value?.url?.length && <button className="font-bold bg-red-950 px-2 rounded-lg" onClick={() => loadMoveData(c.value?.url, c.value?.name)}>Load</button>}</>},
         {field: "accuracy"},
         {field: "power"},
-        {field: "pp"}
+        {field: "pp"},
+        {field: "type.name", headerName:'Type', cellRenderer: (c:ICellRendererParams) => <TypeDisplay type={c.value} className="leading-5 text-center my-1.5"/>, }
     ])
 
     const autoSizeStrategy = useMemo<
-    | SizeColumnsToFitGridStrategy
-    | SizeColumnsToFitProvidedWidthStrategy
-    | SizeColumnsToContentStrategy
-  >(() => {
-    return {
-      type: "fitGridWidth",
-      defaultMinWidth: 100,
-      columnLimits: [
-        {
-          colId: "country",
-          minWidth: 900,
-        },
-      ],
-    };
-  }, []);
+        | SizeColumnsToFitGridStrategy
+        | SizeColumnsToFitProvidedWidthStrategy
+        | SizeColumnsToContentStrategy
+      >(() => {
+        return {
+          type: "fitGridWidth",
+          defaultMinWidth: 100,
+        };
+      }, []);
     
 
     async function loadMoveData(url: string, name: string){
         const response = await fetch(url, {cache: 'force-cache'});
         if (!response.ok) return null;
         const result: PokemonMoveData = await response.json();
-
-        console.log(result);
         
         setRowData((moves) => {
             const currentMove = moves.find(m => m.name === name);
@@ -58,10 +52,36 @@ export function MovesGrid({moves}: Props){
         })
     }
 
-    const theme = themeQuartz.withParams({
-        backgroundColor: 'var(--color-red-900)',
+    useEffect(() => {
+      if (fetchNext > rowData.length){
+        return;
+      }
+      const batchsize = 25;
+      async function loadNext() {
+        const promises = rowData.slice(fetchNext,fetchNext+batchsize).map(m => {
+          if ((m as PokemonMoveData).pp !== undefined){
+            return Promise.resolve();
+          }
+          
+          return loadMoveData(m.url, m.name);
+        })
+  
+        await Promise.all(promises);
+      }
+
+      loadNext();
+
+      setTimeout(() => {
+        setFetchNext(n => n+batchsize);
+      }, 200);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchNext]);
+
+    const theme = themeQuartz.withPart(colorSchemeDarkWarm).withParams({
+        backgroundColor: 'var(--color-red-950)',
         foregroundColor: 'var(--color-white)',
-        
+        borderRadius: '1px',
     })
 
     return <AgGridReact rowData={rowData} columnDefs={columns} theme={theme} autoSizeStrategy={autoSizeStrategy}/>
