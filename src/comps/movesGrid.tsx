@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 import { AllCommunityModule, ColDef, colorSchemeDarkWarm, ICellRendererParams, ModuleRegistry, SizeColumnsToContentStrategy, SizeColumnsToFitGridStrategy, SizeColumnsToFitProvidedWidthStrategy, themeQuartz } from 'ag-grid-community';
 import { PokemonMoveData } from "@/_types/pokemon";
 import { TypeDisplay } from "./typeDisplay";
+import { Spinner } from "./spinner";
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -84,5 +85,5 @@ export function MovesGrid({moves}: Props){
         borderRadius: '1px',
     })
 
-    return fetchNext < rowData.length +0 ? <div className="self-stretch h-full bg-red-950 text-white rounded-xl flex justify-center items-center border-[1px] border-white/5">LOADING...</div> : <AgGridReact rowData={rowData} columnDefs={columns} theme={theme} autoSizeStrategy={autoSizeStrategy}/>
+    return fetchNext < rowData.length +0 ? <div className="self-stretch h-full bg-red-950 text-white rounded-xl flex justify-center items-center border-[1px] border-white/5"><div className="w-20 h-20"><Spinner /></div></div> : <AgGridReact rowData={rowData} columnDefs={columns} theme={theme} autoSizeStrategy={autoSizeStrategy}/>
 }

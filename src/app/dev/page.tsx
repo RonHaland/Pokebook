@@ -1,4 +1,4 @@
-import { AnimatedCloseIcon } from "@/comps/animatedCloseIcon";
+import { Spinner } from "@/comps/spinner";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ export default function DevPage(){
 
     return <main>
         <div className="text-white w-80">
-            <AnimatedCloseIcon />
+            <Spinner />
         </div>
     </main>
 }
